@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My first Vue app</title>
+  <script src="https://unpkg.com/vue"></script>
+  <link rel="stylesheet" type="text/css" href="res/css/style.css">
+</head>
+<body>
+  <div id="app">
+    <h1>{{ message }}</h1>
+    <p>{{ introduction }}</p>
+    <ol>
+        <li v-for="feladat in feladatok" :key="feladat.id">
+          <label class="feladat" v-bind:class="{ important: feladat.important }">
+            <input type="checkbox">
+            {{ feladat.text }}
+            <img src="res/pic/edit.png"><img src="res/pic/cancel.png">
+          </label>
+        </li>
+    </ol>
+    <input type="text" name="taskName">
+    <button name="add_task"><img src="res/pic/add.png"> Hozzáad</button>
+  </div>
+
+  <script>
+    var app = new Vue({
+      el: '#app',
+      data: {
+        message: 'Hello Vue!',
+        introduction: 'This is Adam\'s first App',
+        feladatok: [
+            {
+                id: 1,
+                text: 'Ubuntu telepítés',
+                important: true
+            },
+            {
+                id: 2,
+                text: 'Célok listázása',
+                important: false
+            },
+            {
+                id: 3,
+                text: 'Felkészülés jövő hétre',
+                important: false
+            }
+        ]
+      }
+    })
+  </script>
+
+</body>
+</html>
