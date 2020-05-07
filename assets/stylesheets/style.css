@@ -1,0 +1,20 @@
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+li {
+    margin: 20px;
+}
+.todo {
+    padding: 10px;
+    background-color: blanchedalmond;
+}
+.important {
+    background-color: coral;
+}
+.done {
+    text-decoration: line-through;
+}
+.fakebutton {
+    cursor: pointer;
+}

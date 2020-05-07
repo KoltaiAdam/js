@@ -3,49 +3,106 @@
 <head>
   <title>My first Vue app</title>
   <script src="https://unpkg.com/vue"></script>
-  <link rel="stylesheet" type="text/css" href="res/css/style.css">
+  <link rel="stylesheet" type="text/css" href="assets/stylesheets/style.css">
 </head>
 <body>
   <div id="app">
-    <h1>{{ message }}</h1>
-    <p>{{ introduction }}</p>
-    <ol>
-        <li v-for="feladat in feladatok" :key="feladat.id">
-          <label class="feladat" v-bind:class="{ important: feladat.important }">
-            <input type="checkbox">
-            {{ feladat.text }}
-            <img src="res/pic/edit.png"><img src="res/pic/cancel.png">
-          </label>
+    <h1>Todo List</h1>
+    <h3>You have {{ count }} tasks</h3>
+    <h4>You have {{ doneCount }} completed tasks</h4>
+    <ul>
+        <li
+          v-for="(todo, index) in todos"
+          :key="index"
+          :class="{ important: todo.important, done: todo.done }"
+          class="todo"
+        >
+          <input type="checkbox" :id="'isDone-' + index" v-model="todo.done">
+          <label :for="'isDone-' + index">{{ todo.text }}</label>
+          <img v-on:click="editTaskChange(index)" src="assets/images/edit.png">
+          <img 
+            v-on:click="deleteTodo(index)" 
+            src="assets/images/cancel.png" 
+            class="fakebutton"
+          >
+          <template v-if="editTask == index">
+            <input 
+              type="text" 
+              name="taskName" 
+              style="display: block;"
+              v-model="todo.text"
+            >
+            <img v-on:click="editTaskChange(null)" src="assets/images/edit.png">
+          </template>
         </li>
-    </ol>
-    <input type="text" name="taskName">
-    <button name="add_task"><img src="res/pic/add.png"> Hozzáad</button>
+    </ul>
+    <form v-on:submit.prevent="addTodo">
+      <input type="text" name="taskName" v-model="currentTodo">
+      <button type="submit" name="add_task"><img src="assets/images/add.png"> Hozzáad</button>
+    </form>
   </div>
 
   <script>
     var app = new Vue({
       el: '#app',
       data: {
-        message: 'Hello Vue!',
-        introduction: 'This is Adam\'s first App',
-        feladatok: [
+        currentTodo: '',
+        editTask: null,
+        todos: [
             {
-                id: 1,
                 text: 'Ubuntu telepítés',
-                important: true
+                important: true,
+                done: false
             },
             {
-                id: 2,
                 text: 'Célok listázása',
-                important: false
+                important: false,
+                done: true
             },
             {
-                id: 3,
                 text: 'Felkészülés jövő hétre',
-                important: false
+                important: false,
+                done: false
             }
         ]
+      },
+      computed: {
+        count () {
+          return this.todos.length
+        },
+        doneCount () {
+          var i = 0;
+          var done = 0;
+          for (i=0; i < this.todos.length; i++) {
+            if (this.todos[i].done) {
+              done++
+            }
+          }
+          return done;
+        }
+      },
+      methods: {
+        addTodo () {
+          this.todos.push({
+            text: this.currentTodo,
+            important: false,
+            done: false
+          })
+          this.currentTodo = ''
+        },
+        deleteTodo (index) {
+          this.todos.splice(index, 1)
+        },
+        editTaskChange (index) {
+          
+          if (this.editTask == null) {
+            this.editTask = index
+          }
+          else this.editTask = null
+          
+        }
       }
+
     })
   </script>
 
