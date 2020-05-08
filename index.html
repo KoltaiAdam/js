@@ -14,31 +14,43 @@
         <li
           v-for="(todo, index) in todos"
           :key="index"
-          :class="{ important: todo.important, done: todo.done }"
+          :class="{ important: todo.important }"
           class="todo"
         >
           <input type="checkbox" :id="'isDone-' + index" v-model="todo.done">
-          <label :for="'isDone-' + index">{{ todo.text }}</label>
-          <img v-on:click="editTaskChange(index)" src="assets/images/edit.png">
+          <img v-on:click="editTaskChange(index)" src="assets/images/icons8-edit-50.png" class="icon20">
           <img 
             v-on:click="deleteTodo(index)" 
-            src="assets/images/cancel.png" 
-            class="fakebutton"
+            src="assets/images/icons8-cancel-50.png" 
+            class="icon20 fakebutton"
           >
+          <img 
+            v-if
+            v-on:click="makeTodoImportant(index)" 
+            src="assets/images/icons8-box-important-50.png" 
+            class="icon20 fakebutton"
+          >
+          <label :for="'isDone-' + index" :class="{ done: todo.done }">{{ todo.text }}</label>
           <template v-if="editTask == index">
-            <input 
-              type="text" 
-              name="taskName" 
-              style="display: block;"
-              v-model="todo.text"
-            >
-            <img v-on:click="editTaskChange(null)" src="assets/images/edit.png">
+            <div style="display: block;">
+              <input 
+                type="text" 
+                name="taskName" 
+                style=""
+                v-model="todo.text"
+              >
+              <img 
+                v-on:click="editTaskChange(null)" 
+                src="assets/images/icons8-tick-box-50.png" 
+                class="icon20"
+              >
+            </div>
           </template>
         </li>
     </ul>
     <form v-on:submit.prevent="addTodo">
       <input type="text" name="taskName" v-model="currentTodo">
-      <button type="submit" name="add_task"><img src="assets/images/add.png"> Hozzáad</button>
+      <button type="submit" name="add_task"><img src="assets/images/icons8-add-50-2.png" class="icon20"> Hozzáad</button>
     </form>
   </div>
 
@@ -52,15 +64,45 @@
             {
                 text: 'Ubuntu telepítés',
                 important: true,
-                done: false
+                done: true
             },
             {
-                text: 'Célok listázása',
+                text: 'Git telepítés',
                 important: false,
                 done: true
             },
             {
-                text: 'Felkészülés jövő hétre',
+                text: 'Delete button',
+                important: false,
+                done: false
+            },
+            {
+                text: 'Edit button',
+                important: false,
+                done: false
+            },
+            {
+                text: 'Important toggle',
+                important: false,
+                done: false
+            },
+            {
+                text: 'dummy',
+                important: false,
+                done: false
+            },
+            {
+                text: 'dummy',
+                important: false,
+                done: false
+            },
+            {
+                text: 'dummy',
+                important: false,
+                done: false
+            },
+            {
+                text: 'Edit button shows insted of original text',
                 important: false,
                 done: false
             }
@@ -99,6 +141,14 @@
             this.editTask = index
           }
           else this.editTask = null
+          
+        },
+        makeTodoImportant (index) {
+          if (this.todos[index].important) {
+            this.todos[index].important = false
+          } else {
+            this.todos[index].important = true
+          }
           
         }
       }

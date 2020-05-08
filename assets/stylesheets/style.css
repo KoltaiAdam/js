@@ -5,16 +5,25 @@ ul {
 li {
     margin: 20px;
 }
+input[type=checkbox] {
+    width: 20px;
+    height: 20px;
+    background-color: lightslategray;
+    border: 1px solid #ffffff;
+}
 .todo {
     padding: 10px;
-    background-color: blanchedalmond;
+    background-color: rgb(255, 233, 174);
 }
 .important {
-    background-color: coral;
+    background-color: rgb(255, 192, 109);
 }
 .done {
     text-decoration: line-through;
 }
 .fakebutton {
     cursor: pointer;
+}
+.icon20 {
+    width: 20px;
 }
