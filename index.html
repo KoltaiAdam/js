@@ -10,57 +10,53 @@
     <h1>Todo List</h1>
     <h3>You have {{ count }} tasks</h3>
     <h4>You have {{ doneCount }} completed tasks</h4>
+    <form @submit.prevent="addTodo">
+      <input type="text" name="taskName" v-model="currentTodo">
+      <button type="submit" name="add_task"><img src="assets/images/icons8-add-50-2.png" class="icon25"> Hozzáad</button>
+    </form>
+    <div v-if="lastTodo">
+      Todo deleted. <button @click="restoreTodo">Restore</button>
+    </div>
     <ul>
         <li
           v-for="(todo, index) in todos"
           :key="index"
           :class="{ important: todo.important }"
           class="todo"
-        >
-          <img 
-            v-on:click="editTaskChange(null)"
-            src="assets/images/icons8-move-grabber-50.png"
-            class="icon25"
-           >         
+        >       
           <input 
             type="checkbox"
             :id="'isDone-' + index"
-            v-model="todo.done"
+            :checked="todo.done"
+            @change="toggleTodoDone(index)"
           >
-          <img v-on:click="editTaskChange(index)" src="assets/images/icons8-edit-50.png" class="icon25">
+          <img @click="toggleTodoField(index, 'editing')" src="assets/images/icons8-edit-50.png" class="icon25">
           <img 
-            v-on:click="deleteTodo(index)"
+            @click="deleteTodo(index)"
             src="assets/images/icons8-cancel-50.png"
             class="icon25 fakebutton"
           >
           <img 
-            v-on:click="makeTodoImportant(index)"
+            @click="toggleTodoField(index, 'important')"
             src="assets/images/icons8-box-important-50.png"
             class="icon25 fakebutton"
           >
-          <label 
-            
+          <label  
             :class="{ done: todo.done }"
-            v-on:click="editTaskChange(index)"
+            @dblclick="toggleTodoField(index, 'editing')"
+            v-if="!todo.editing"
           >
-            <template v-if="editTask != index">
-              {{ todo.text }}
-            </template>
+            {{ todo.text }}
           </label>
-          <template v-if="editTask == index">
-            <input 
-              type="text"
-              name="taskName"
-              v-model="todo.text"
-              v-on:keyup.enter="editTaskChange(null)"
-            >
-          </template>
+          <input 
+            type="text"
+            name="taskName"
+            v-model="todo.text"
+            @keyup.enter="toggleTodoField(index, 'editing')"
+            v-else
+          >
         </li>
     </ul>
-    <form v-on:submit.prevent="addTodo">
-      <input type="text" name="taskName" v-model="currentTodo">
-      <button type="submit" name="add_task"><img src="assets/images/icons8-add-50-2.png" class="icon25"> Hozzáad</button>
-    </form>
   </div>
 
   <script>
@@ -68,52 +64,61 @@
       el: '#app',
       data: {
         currentTodo: '',
-        editTask: null,
+        lastTodo: null,
         todos: [
             {
                 text: 'Ubuntu telepítés',
                 important: true,
-                done: true
+                done: true,
+                editing: false
             },
             {
                 text: 'Git telepítés',
                 important: false,
-                done: true
+                done: true,
+                editing: false
             },
             {
                 text: 'Delete button',
                 important: false,
-                done: true
+                done: true,
+                editing: false
             },
             {
                 text: 'Edit button',
                 important: false,
-                done: true
+                done: true,
+                editing: false
             },
             {
                 text: 'Important toggle',
                 important: false,
-                done: true
+                done: true,
+                editing: false
             },
             {
                 text: 'Reordering tasks',
                 important: false,
-                done: false
+                done: false,
+                editing: false
             },
             {
                 text: 'Prioritize tasks (important ones show first)',
                 important: false,
-                done: false
+                done: false,
+                editing: false
             },
             {
                 text: 'Ability to make lists',
                 important: false,
-                done: false
+                done: false,
+                editing: false
             },
             {
                 text: 'Edit button shows insted of original text',
                 important: false,
-                done: true
+                done: true,
+                editing: false
             }
         ]
       },
@@ -142,23 +147,28 @@
           this.currentTodo = ''
         },
         deleteTodo (index) {
-          this.todos.splice(index, 1)
-        },
-        editTaskChange (index) {
-          
-          if (this.editTask == null) {
-            this.editTask = index
+          if (confirm('Are you sure?')) {
+            this.lastTodo = {
+              todo: this.todos[index],
+              index: index
+            }
+
+            this.todos.splice(index, 1)
           }
-          else this.editTask = null
-          
         },
-        makeTodoImportant (index) {
-          if (this.todos[index].important) {
-            this.todos[index].important = false
-          } else {
-            this.todos[index].important = true
+        toggleTodoField (index, field) {
+          this.todos[index][field] = !this.todos[index][field]
+        },
+        toggleTodoDone (index) {
+          this.todos[index].done = !this.todos[index].done
+          if (this.todos[index].done) {
+            this.todos[index].editing = false
           }
           
+        },
+        restoreTodo () {
+          this.todos.splice(this.lastTodo.index, 0, this.lastTodo.todo)
+          this.lastTodo = null
         }
       }
 
