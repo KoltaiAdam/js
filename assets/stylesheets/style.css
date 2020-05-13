@@ -3,13 +3,18 @@ ul {
     padding: 0;
 }
 li {
-    margin: 20px;
+    margin: 30px;
+    font-size: x-large;
+    font-family: Arial, Helvetica, sans-serif;
 }
 input[type=checkbox] {
-    width: 20px;
-    height: 20px;
+    width: 30px;
+    height: 30px;
     background-color: lightslategray;
     border: 1px solid #ffffff;
+}
+input[type=text], button {
+    font-size: x-large;
 }
 .todo {
     padding: 10px;
@@ -24,6 +29,8 @@ input[type=checkbox] {
 .fakebutton {
     cursor: pointer;
 }
-.icon20 {
-    width: 20px;
+.icon25 {
+    position: relative;
+    top:3px;
+    width: 25px;
 }

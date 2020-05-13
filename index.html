@@ -17,40 +17,49 @@
           :class="{ important: todo.important }"
           class="todo"
         >
-          <input type="checkbox" :id="'isDone-' + index" v-model="todo.done">
-          <img v-on:click="editTaskChange(index)" src="assets/images/icons8-edit-50.png" class="icon20">
           <img 
-            v-on:click="deleteTodo(index)" 
-            src="assets/images/icons8-cancel-50.png" 
-            class="icon20 fakebutton"
+            v-on:click="editTaskChange(null)"
+            src="assets/images/icons8-move-grabber-50.png"
+            class="icon25"
+           >         
+          <input 
+            type="checkbox"
+            :id="'isDone-' + index"
+            v-model="todo.done"
+          >
+          <img v-on:click="editTaskChange(index)" src="assets/images/icons8-edit-50.png" class="icon25">
+          <img 
+            v-on:click="deleteTodo(index)"
+            src="assets/images/icons8-cancel-50.png"
+            class="icon25 fakebutton"
           >
           <img 
-            v-if
-            v-on:click="makeTodoImportant(index)" 
-            src="assets/images/icons8-box-important-50.png" 
-            class="icon20 fakebutton"
+            v-on:click="makeTodoImportant(index)"
+            src="assets/images/icons8-box-important-50.png"
+            class="icon25 fakebutton"
           >
-          <label :for="'isDone-' + index" :class="{ done: todo.done }">{{ todo.text }}</label>
+          <label 
+            
+            :class="{ done: todo.done }"
+            v-on:click="editTaskChange(index)"
+          >
+            <template v-if="editTask != index">
+              {{ todo.text }}
+            </template>
+          </label>
           <template v-if="editTask == index">
-            <div style="display: block;">
-              <input 
-                type="text" 
-                name="taskName" 
-                style=""
-                v-model="todo.text"
-              >
-              <img 
-                v-on:click="editTaskChange(null)" 
-                src="assets/images/icons8-tick-box-50.png" 
-                class="icon20"
-              >
-            </div>
+            <input 
+              type="text"
+              name="taskName"
+              v-model="todo.text"
+              v-on:keyup.enter="editTaskChange(null)"
+            >
           </template>
         </li>
     </ul>
     <form v-on:submit.prevent="addTodo">
       <input type="text" name="taskName" v-model="currentTodo">
-      <button type="submit" name="add_task"><img src="assets/images/icons8-add-50-2.png" class="icon20"> Hozzáad</button>
+      <button type="submit" name="add_task"><img src="assets/images/icons8-add-50-2.png" class="icon25"> Hozzáad</button>
     </form>
   </div>
 
@@ -74,37 +83,37 @@
             {
                 text: 'Delete button',
                 important: false,
-                done: false
+                done: true
             },
             {
                 text: 'Edit button',
                 important: false,
-                done: false
+                done: true
             },
             {
                 text: 'Important toggle',
                 important: false,
-                done: false
+                done: true
             },
             {
-                text: 'dummy',
+                text: 'Reordering tasks',
                 important: false,
                 done: false
             },
             {
-                text: 'dummy',
+                text: 'Prioritize tasks (important ones show first)',
                 important: false,
                 done: false
             },
             {
-                text: 'dummy',
+                text: 'Ability to make lists',
                 important: false,
                 done: false
             },
             {
                 text: 'Edit button shows insted of original text',
                 important: false,
-                done: false
+                done: true
             }
         ]
       },
